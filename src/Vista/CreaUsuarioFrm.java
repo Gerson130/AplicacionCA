@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
-
-/**
- *
- * @author gerso
- */
+import Controlador.Controlador;
 public class CreaUsuarioFrm extends javax.swing.JFrame {
 
     /**
@@ -15,6 +7,18 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
      */
     public CreaUsuarioFrm() {
         initComponents();
+    }
+    
+    public void creaUsuario() {
+        
+        String rut = txtRut.getText();
+        String nombre = txtNombre.getText();
+        String cargo = txtCargo.getText();
+        String area = txtArea.getText();
+        String contrasenia = txtContrasenia.getText();
+        String correo = txtCorreo.getText();
+        
+        
     }
 
     /**
@@ -27,25 +31,58 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txt = new javax.swing.JTextField();
+        txtRut = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtCargo = new javax.swing.JTextField();
+        txtArea = new javax.swing.JTextField();
+        txtContrasenia = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        txtRut.setToolTipText("RUT");
+
+        txtNombre.setToolTipText("Nombre");
+
+        txtCargo.setToolTipText("Cargo");
+
+        txtArea.setToolTipText("Área");
+
+        txtContrasenia.setToolTipText("Contraseña");
+
+        txtCorreo.setToolTipText("Correo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(154, 154, 154)
-                .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(273, Short.MAX_VALUE))
+                .addGap(0, 157, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCargo, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                    .addComponent(txtNombre)
+                    .addComponent(txtRut)
+                    .addComponent(txtArea)
+                    .addComponent(txtContrasenia)
+                    .addComponent(txtCorreo))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
-                .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(323, Short.MAX_VALUE))
+                .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,6 +136,11 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txt;
+    private javax.swing.JTextField txtArea;
+    private javax.swing.JTextField txtCargo;
+    private javax.swing.JTextField txtContrasenia;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtRut;
     // End of variables declaration//GEN-END:variables
 }

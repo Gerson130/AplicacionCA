@@ -38,10 +38,17 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
-                  <Component id="txt" min="-2" pref="71" max="-2" attributes="0"/>
-                  <EmptySpace pref="273" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace min="0" pref="157" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="txtCargo" pref="179" max="32767" attributes="0"/>
+                      <Component id="txtNombre" max="32767" attributes="0"/>
+                      <Component id="txtRut" max="32767" attributes="0"/>
+                      <Component id="txtArea" max="32767" attributes="0"/>
+                      <Component id="txtContrasenia" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtCorreo" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="162" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -49,14 +56,52 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                  <Component id="txt" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="323" max="32767" attributes="0"/>
+                  <Component id="txtRut" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                  <Component id="txtNombre" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="txtCargo" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="txtArea" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="txtContrasenia" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="txtCorreo" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="114" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JTextField" name="txt">
+        <Component class="javax.swing.JTextField" name="txtRut">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="RUT"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtNombre">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Nombre"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtCargo">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Cargo"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtArea">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="&#xc1;rea"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtContrasenia">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Contrase&#xf1;a"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtCorreo">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="Correo"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
