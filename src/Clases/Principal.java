@@ -2,6 +2,7 @@ package Clases;
 
 import Model.ConexionDB;
 import Vista.CreaUsuarioFrm;
+import Vista.MenuPrincipalFrm;
 public class Principal {
 
     /**
@@ -10,7 +11,7 @@ public class Principal {
     public static void main(String[] args) {
         ConexionDB c = new ConexionDB();
         c.establecerConexion();
-        CreaUsuarioFrm ventana = new CreaUsuarioFrm();
+        MenuPrincipalFrm ventana = new MenuPrincipalFrm();
         ventana.setVisible(true);
     }
     

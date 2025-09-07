@@ -1,15 +1,31 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ */
 package Vista;
+
 import Controlador.Controlador;
-public class CreaUsuarioFrm extends javax.swing.JFrame {
+import Model.Usuario;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author gerso
+ */
+public class CreaUsuarioFrm extends javax.swing.JDialog {
 
     /**
-     * Creates new form CreaUsuarioFrm
+     * Creates new form CreaUsuarioDlg
      */
-    public CreaUsuarioFrm() {
+    public CreaUsuarioFrm(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
     
     public void creaUsuario() {
+        Usuario usuario = new Usuario();
         
         String rut = txtRut.getText();
         String nombre = txtNombre.getText();
@@ -18,7 +34,31 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
         String contrasenia = txtContrasenia.getText();
         String correo = txtCorreo.getText();
         
+        usuario.setRut(rut);
+        usuario.setNombre(nombre);
+        usuario.setCargo(cargo);
+        usuario.setArea(area);
+        usuario.setContrasenia(contrasenia);
+        usuario.setCorreo(correo);
         
+        if (rut.isEmpty() || nombre.isEmpty() || cargo.isEmpty() || area.isEmpty() || contrasenia.isEmpty() || correo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese los datos correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Controlador c = new Controlador();
+            int datosGuardado = c.guardarUsuario(usuario);
+            if (datosGuardado == -1) {
+                JOptionPane.showMessageDialog(this, "El rut ingresado ya existe", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }
+            if (datosGuardado == -2) {
+                JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Información", JOptionPane.WARNING_MESSAGE);
+            }
+            if (datosGuardado == 1) {
+                JOptionPane.showMessageDialog(this, "El registro se completo exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (datosGuardado == 0) {
+                JOptionPane.showMessageDialog(this, "No se logró ingresar registro, revise los datos", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -31,16 +71,18 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtRut = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtCargo = new javax.swing.JTextField();
         txtArea = new javax.swing.JTextField();
         txtContrasenia = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
+        vtnGuardar = new javax.swing.JButton();
+        txtRut = new javax.swing.JFormattedTextField();
+        btnVolver = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        txtRut.setToolTipText("RUT");
+        jPanel1.setPreferredSize(new java.awt.Dimension(500, 400));
 
         txtNombre.setToolTipText("Nombre");
 
@@ -52,27 +94,54 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
 
         txtCorreo.setToolTipText("Correo");
 
+        vtnGuardar.setText("Guardar");
+        vtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vtnGuardarActionPerformed(evt);
+            }
+        });
+
+        try {
+            txtRut.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 157, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCargo, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                    .addComponent(txtNombre)
-                    .addComponent(txtRut)
-                    .addComponent(txtArea)
-                    .addComponent(txtContrasenia)
-                    .addComponent(txtCorreo))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(159, 159, 159)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCargo)
+                            .addComponent(txtNombre)
+                            .addComponent(txtArea)
+                            .addComponent(txtContrasenia)
+                            .addComponent(txtCorreo)
+                            .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(206, 206, 206)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(vtnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(162, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addGap(72, 72, 72)
                 .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -82,7 +151,11 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
                 .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(vtnGuardar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnVolver)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -98,6 +171,14 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void vtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vtnGuardarActionPerformed
+        creaUsuario();
+    }//GEN-LAST:event_vtnGuardarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,22 +206,32 @@ public class CreaUsuarioFrm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(CreaUsuarioFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CreaUsuarioFrm().setVisible(true);
+                CreaUsuarioFrm dialog = new CreaUsuarioFrm(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnVolver;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtCargo;
     private javax.swing.JTextField txtContrasenia;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtRut;
+    private javax.swing.JFormattedTextField txtRut;
+    private javax.swing.JButton vtnGuardar;
     // End of variables declaration//GEN-END:variables
 }

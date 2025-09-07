@@ -21,7 +21,7 @@ public class Controlador {
             sentencia = conexion.establecerConexion().createStatement();
             datos = sentencia.executeUpdate(query);
         } catch (SQLException e) {
-            System.out.println("Error al eliminar el usuario "+ e);
+            System.out.println("Error al eliminar el usuario " + e);
         }
         return datos;
     }
@@ -58,6 +58,25 @@ public class Controlador {
         return resultado;
     }
 
+    public ResultSet validarRutUsuario(String rut) {
+        try {
+            String query = "SELECT * FROM Usuario WHERE Rut = '" + rut + "'";
+            sentencia = conexion.establecerConexion().createStatement();
+            resultado = sentencia.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("Error de validación " + e);
+        }
+        return resultado;
+    }
+
+    public boolean validarCorreoUsuario(String correo) {
+        boolean valido = true;
+        if (correo.contains("@")) {
+            valido = false;
+        }
+        return valido;
+    }
+
     public int modificarUsuario(int Id) {
         int datos = 0;
         Usuario usuario = new Usuario();
@@ -70,23 +89,33 @@ public class Controlador {
         }
         return datos;
     }
-       
-    public int guardarUsuario(Usuario usuario){
+
+    public int guardarUsuario(Usuario usuario) {
         int datos = 0;
         try {
-        sentencia = conexion.establecerConexion().createStatement();
-        String query = String.format("INSERT INTO Usuario (Rut, Nombre, Cargo, Area, Clave, Correo) "
-                + "VALUES '%s', '%s', '%s', '%s', '%s', '%s'",
-                usuario.getRut(),
-                usuario.getNombre(),
-                usuario.getCargo(),
-                usuario.getArea(), 
-                usuario.getClave(),
-                usuario.getCorreo());
-
-        datos = sentencia.executeUpdate(query);
-        } catch (SQLException e) {
-            System.out.println("Error al guardar usuario "+e);
+            ResultSet validacionRut = validarRutUsuario(usuario.getRut());
+            boolean validacionCorreo = validarCorreoUsuario(usuario.getCorreo());
+            if (validacionRut.next()) {
+                datos = -1;
+            }
+            else if (validacionCorreo) {
+                datos = -2;
+            }
+            else {
+                sentencia = conexion.establecerConexion().createStatement();
+                String query2 = String.format("INSERT INTO Usuario (Rut, Nombre, Cargo, Area, Clave, Correo) "
+                        + "VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+                        usuario.getRut(),
+                        usuario.getNombre(),
+                        usuario.getCargo(),
+                        usuario.getArea(),
+                        usuario.getClave(),
+                        usuario.getCorreo());
+                datos = sentencia.executeUpdate(query2);
+            }
+            System.out.println(datos);
+        } catch (Exception e) {
+            System.out.println("Error al guardar usuario " + e);
         }
         return datos;
     }
