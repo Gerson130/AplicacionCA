@@ -90,4 +90,46 @@ public class Controlador {
         }
         return datos;
     }
+    
+    // Método Validar Login
+    public boolean validarLogin(String correo, String clave) {
+        try {
+            String query = "SELECT * FROM Usuario WHERE correo = '" + correo + "' AND clave = '" + clave + "'";
+            sentencia = conexion.establecerConexion().createStatement();
+            resultado = sentencia.executeQuery(query);
+            
+            return resultado.next();
+            
+        } catch (SQLException e) {
+            System.out.println("Error al validar login: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Método Obtener Usuario por Correo
+    public Usuario obtenerUsuarioPorCorreo(String correo) {
+        Usuario usuario = null;
+        try {
+            String query = "SELECT * FROM Usuario WHERE correo = '" + correo + "'";
+            sentencia = conexion.establecerConexion().createStatement();
+            resultado = sentencia.executeQuery(query);
+            
+            if (resultado.next()) {
+                usuario = new Usuario();
+                usuario.setId(resultado.getInt("id"));
+                usuario.setRut(resultado.getString("rut"));
+                usuario.setNombre(resultado.getString("nombre"));
+                usuario.setCargo(resultado.getString("cargo"));
+                usuario.setArea(resultado.getString("area"));
+                usuario.setClave(resultado.getString("clave"));
+                usuario.setCorreo(resultado.getString("correo"));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error al obtener usuario: " + e.getMessage());
+        }
+        return usuario;
+    }
+
+    
 }
