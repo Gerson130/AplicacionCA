@@ -28,24 +28,25 @@ public class Controlador {
 
     public ResultSet buscarUsuario(Usuario usuario) {
         try {
-            String query = "SELECT * FROM Usuario";
-//            if (usuario.getRut() != null && !usuario.getRut().isEmpty()) {
-//                query.append(" AND Rut = '").append(usuario.getRut()).append("'");
-//            }
-//            if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
-//                query.append(" AND Nombre = '").append(usuario.getNombre()).append("'");
-//            }
-//            if (usuario.getCargo() != null && !usuario.getCargo().isEmpty()) {
-//                query.append(" AND Cargo = '").append(usuario.getCargo()).append("'");
-//            }
-//            if (usuario.getArea() != null && !usuario.getArea().isEmpty()) {
-//                query.append(" AND Area = '").append(usuario.getArea()).append("'");
-//            }
-//            if (usuario.getCorreo() != null && !usuario.getCorreo().isEmpty()) {
-//                query.append(" AND Correo = '").append(usuario.getClave()).append("'");
-//            }
+            StringBuilder query = new StringBuilder("SELECT * FROM Usuario WHERE 1");
+            if (usuario.getRut() != null && !usuario.getRut().isEmpty() && !usuario.getRut().endsWith(" ")) {
+                query.append(" AND Rut = '").append(usuario.getRut()).append("'");
+            }
+            if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
+                query.append(" AND Nombre = '").append(usuario.getNombre()).append("'");
+            }
+            if (usuario.getCargo() != null && !usuario.getCargo().isEmpty()) {
+                query.append(" AND Cargo = '").append(usuario.getCargo()).append("'");
+            }
+            if (usuario.getArea() != null && !usuario.getArea().isEmpty()) {
+                query.append(" AND Area = '").append(usuario.getArea()).append("'");
+            }
+            if (usuario.getCorreo() != null && !usuario.getCorreo().isEmpty()) {
+                query.append(" AND Correo = '").append(usuario.getClave()).append("'");
+            }
             sentencia = conexion.establecerConexion().createStatement();
-            resultado = sentencia.executeQuery(query);
+            resultado = sentencia.executeQuery(query.toString());
+            System.out.println(query.toString());
         } catch (SQLException e) {
             System.out.println("Error al buscar el usuario " + e);
         }

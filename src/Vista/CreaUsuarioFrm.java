@@ -22,17 +22,26 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
+        txtRut9.setEnabled(false);
+        rdo10.setSelected(true);
     }
     
     public void creaUsuario() {
         Usuario usuario = new Usuario();
         
-        String rut = txtRut.getText();
+        String rut = "";
         String nombre = txtNombre.getText();
         String cargo = txtCargo.getText();
         String area = txtArea.getText();
         String contrasenia = txtContrasenia.getText();
         String correo = txtCorreo.getText();
+        
+        if (txtRut9.getText().endsWith(" ")) {
+            rut = txtRut.getText();
+        }
+        if (txtRut.getText().endsWith(" ")) {
+            rut = txtRut9.getText();
+        }
         
         usuario.setRut(rut);
         usuario.setNombre(nombre);
@@ -40,8 +49,8 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         usuario.setArea(area);
         usuario.setClave(contrasenia);
         usuario.setCorreo(correo);
-        
-        if (rut.isEmpty() || nombre.isEmpty() || cargo.isEmpty() || area.isEmpty() || contrasenia.isEmpty() || correo.isEmpty()) {
+        System.out.println(""+txtRut.getText()+txtRut9.getText());
+        if (rut.isEmpty() || rut.endsWith(" ") || nombre.isEmpty() || cargo.isEmpty() || area.isEmpty() || contrasenia.isEmpty() || correo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingrese los datos correctamente", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             Controlador c = new Controlador();
@@ -70,6 +79,7 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroupRut = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         txtNombre = new javax.swing.JTextField();
         txtCargo = new javax.swing.JTextField();
@@ -79,20 +89,63 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         vtnGuardar = new javax.swing.JButton();
         txtRut = new javax.swing.JFormattedTextField();
         btnVolver = new javax.swing.JButton();
+        txtRut9 = new javax.swing.JFormattedTextField();
+        lblRut9 = new javax.swing.JLabel();
+        lblRut10 = new javax.swing.JLabel();
+        rdo9 = new javax.swing.JRadioButton();
+        rdo10 = new javax.swing.JRadioButton();
+        lblNombre = new javax.swing.JLabel();
+        lblCargo = new javax.swing.JLabel();
+        lblArea = new javax.swing.JLabel();
+        lblContrasenia = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 400));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtNombre.setToolTipText("Nombre");
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 218, 179, -1));
 
         txtCargo.setToolTipText("Cargo");
+        txtCargo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCargoKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 218, 179, -1));
 
         txtArea.setToolTipText("Área");
+        txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 273, 179, -1));
 
         txtContrasenia.setToolTipText("Contraseña");
+        txtContrasenia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtContraseniaKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 273, 179, -1));
 
         txtCorreo.setToolTipText("Correo");
+        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoKeyTyped(evt);
+            }
+        });
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 329, 179, -1));
 
         vtnGuardar.setText("Guardar");
         vtnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -100,12 +153,14 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
                 vtnGuardarActionPerformed(evt);
             }
         });
+        jPanel1.add(vtnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 329, -1, -1));
 
         try {
             txtRut.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########-#")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        jPanel1.add(txtRut, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 133, 179, -1));
 
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -113,50 +168,72 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
                 btnVolverActionPerformed(evt);
             }
         });
+        jPanel1.add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(377, 329, -1, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCargo)
-                            .addComponent(txtNombre)
-                            .addComponent(txtArea)
-                            .addComponent(txtContrasenia)
-                            .addComponent(txtCorreo)
-                            .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(206, 206, 206)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(vtnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(162, Short.MAX_VALUE))
+        try {
+            txtRut9.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel1.add(txtRut9, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 133, 179, -1));
+
+        lblRut9.setText("Rut de 9 digitos");
+        jPanel1.add(lblRut9, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 111, 113, -1));
+
+        lblRut10.setText("Rut de 10 digitos");
+        jPanel1.add(lblRut10, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 111, -1, -1));
+
+        btnGroupRut.add(rdo9);
+        rdo9.setText("9 digitos");
+        rdo9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdo9MouseClicked(evt);
+            }
+        });
+        jPanel1.add(rdo9, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 161, 98, -1));
+
+        btnGroupRut.add(rdo10);
+        rdo10.setText("10 digitos");
+        rdo10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdo10MouseClicked(evt);
+            }
+        });
+        jPanel1.add(rdo10, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 161, 98, -1));
+
+        lblNombre.setText("Nombre y apellido");
+        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 196, 112, -1));
+
+        lblCargo.setText("Cargo");
+        jPanel1.add(lblCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 196, 37, -1));
+
+        lblArea.setText("Área");
+        jPanel1.add(lblArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 251, 37, -1));
+
+        lblContrasenia.setText("Contraseña");
+        jPanel1.add(lblContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 251, -1, -1));
+
+        jLabel1.setText("Correo");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 307, 60, -1));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrese datos del trabajador"));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(txtRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(vtnGuardar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnVolver)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 277, Short.MAX_VALUE)
         );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 450, 300));
+
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        jLabel3.setText("Ingreso de nuevo usuario");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,7 +243,7 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
         );
 
         pack();
@@ -179,6 +256,74 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void rdo9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdo9MouseClicked
+        if (rdo9.isSelected()) {
+            txtRut9.setEnabled(true);
+            txtRut.setEnabled(false);
+            txtRut.setText("");
+        }
+    }//GEN-LAST:event_rdo9MouseClicked
+
+    private void rdo10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdo10MouseClicked
+        if (rdo10.isSelected()) {
+            txtRut.setEnabled(true);
+            txtRut9.setEnabled(false);
+            txtRut9.setText("");
+        }
+    }//GEN-LAST:event_rdo10MouseClicked
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        String largoTexto = txtNombre.getText();
+        char texto = evt.getKeyChar();
+        
+        if (largoTexto.length() >= 50) {
+            evt.consume();
+        }
+        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtCargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCargoKeyTyped
+        String largoTexto = txtCargo.getText();
+        char texto = evt.getKeyChar();
+        
+        if (largoTexto.length() >= 30) {
+            evt.consume();
+        }
+        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCargoKeyTyped
+
+    private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
+        String largoTexto = txtArea.getText();
+        char texto = evt.getKeyChar();
+        
+        if (largoTexto.length() >= 30) {
+            evt.consume();
+        }
+        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAreaKeyTyped
+
+    private void txtContraseniaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraseniaKeyTyped
+        String largoTexto = txtContrasenia.getText();
+        
+        if (largoTexto.length() >=10) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtContraseniaKeyTyped
+
+    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
+        String largoTexto = txtCorreo.getText();
+        
+        if (largoTexto.length() >= 30) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCorreoKeyTyped
 
     /**
      * @param args the command line arguments
@@ -224,14 +369,27 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btnGroupRut;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblArea;
+    private javax.swing.JLabel lblCargo;
+    private javax.swing.JLabel lblContrasenia;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRut10;
+    private javax.swing.JLabel lblRut9;
+    private javax.swing.JRadioButton rdo10;
+    private javax.swing.JRadioButton rdo9;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtCargo;
     private javax.swing.JTextField txtContrasenia;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JFormattedTextField txtRut;
+    private javax.swing.JFormattedTextField txtRut9;
     private javax.swing.JButton vtnGuardar;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,8 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package Vista;
+
+import javax.swing.JOptionPane;
+import Controlador.Controlador;
+import Model.Usuario;
+import Model.ConexionDB;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,7 +20,14 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     public ModificaUsuarioFrm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        txtRut9.setVisible(false);
+        rdo10.setSelected(true);
+        txtRut9.setEnabled(false);
+        rdoBuscar.setSelected(true);
+        lblAvanzado.setVisible(false);
+        lblContrasenia.setVisible(false);
+        txtClave.setVisible(false);
+        btnEliminar.setVisible(false);
+        btnModificar.setVisible(false);
     }
 
 ////    public void cambiaFormato() {
@@ -27,6 +38,63 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
 ////        }
 //
 //    }
+    public void buscarUsuario() {
+
+            Controlador servicio = new Controlador();
+            Usuario usuario = new Usuario();
+//
+            String rut = "";
+            String nombre = txtNombre.getText();
+            String cargo = txtCargo.getText();
+            String area = txtArea.getText();
+            String correo = txtCorreo.getText();
+
+            if (txtRut10.getText().endsWith(" ")) {
+                rut = txtRut9.getText();
+            }
+            if (txtRut9.getText().endsWith(" ")) {
+                rut = txtRut10.getText();
+            }
+
+            usuario.setRut(rut);
+            usuario.setNombre(nombre);
+            usuario.setCargo(cargo);
+            usuario.setArea(area);
+            usuario.setCorreo(correo);
+        try {
+            ResultSet busqueda = servicio.buscarUsuario(usuario);
+
+            String[] datosBD = new String[7];
+
+            DefaultTableModel nuevoModelo = new DefaultTableModel();
+
+            nuevoModelo.addColumn("Id");
+            nuevoModelo.addColumn("Rut");
+            nuevoModelo.addColumn("Nombre");
+            nuevoModelo.addColumn("Cargo");
+            nuevoModelo.addColumn("Área");
+            nuevoModelo.addColumn("Clave");
+            nuevoModelo.addColumn("Correo");
+
+            tblUsuarios.setModel(nuevoModelo);
+
+            while (busqueda.next() == true) {
+                datosBD[0] = busqueda.getString(1);
+                datosBD[1] = busqueda.getString(2);
+                datosBD[2] = busqueda.getString(3);
+                datosBD[3] = busqueda.getString(4);
+                datosBD[4] = busqueda.getString(5);
+                datosBD[5] = busqueda.getString(6);
+                datosBD[6] = busqueda.getString(7);
+                nuevoModelo.addRow(datosBD);
+                tblUsuarios.setModel(nuevoModelo);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al encontrar usuarios");
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,22 +104,54 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroupRut = new javax.swing.ButtonGroup();
+        btnGroupAvanzado = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblUsuarios = new javax.swing.JTable();
         txtNombre = new javax.swing.JTextField();
         txtCargo = new javax.swing.JTextField();
         txtArea = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
-        txtRut10 = new javax.swing.JFormattedTextField();
         txtRut9 = new javax.swing.JFormattedTextField();
+        txtRut10 = new javax.swing.JFormattedTextField();
+        rdo9 = new javax.swing.JRadioButton();
+        rdo10 = new javax.swing.JRadioButton();
+        lblNombre = new javax.swing.JLabel();
+        lblCargo = new javax.swing.JLabel();
+        lblArea = new javax.swing.JLabel();
+        lblCorreo = new javax.swing.JLabel();
+        lblRut10 = new javax.swing.JLabel();
+        lblRut9 = new javax.swing.JLabel();
+        rdoModificar = new javax.swing.JRadioButton();
+        rdoBuscar = new javax.swing.JRadioButton();
+        btnEliminar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        txtClave = new javax.swing.JTextField();
+        lblBusqueda = new javax.swing.JLabel();
+        lblContrasenia = new javax.swing.JLabel();
+        lblAvanzado = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Buscar");
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        btnBuscar.setText("Buscar");
+        btnBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBuscarMouseClicked(evt);
+            }
+        });
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, -1, -1));
+
+        tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -62,13 +162,26 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblUsuarios);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(409, 35, -1, 330));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 126, -1));
+        jPanel1.add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 126, -1));
+        jPanel1.add(txtArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, 126, -1));
 
         txtCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreoFocusLost(evt);
             }
         });
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 126, -1));
+
+        try {
+            txtRut9.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#######-#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jPanel1.add(txtRut9, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 80, 126, -1));
 
         try {
             txtRut10.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########-#")));
@@ -99,108 +212,165 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
                 txtRut10KeyTyped(evt);
             }
         });
+        jPanel1.add(txtRut10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 126, -1));
 
-        try {
-            txtRut9.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#######-#")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
+        btnGroupRut.add(rdo9);
+        rdo9.setText("9 digitos");
+        rdo9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdo9MouseClicked(evt);
+            }
+        });
+        rdo9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdo9ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rdo9, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 98, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtArea, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                            .addComponent(txtCargo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(80, 80, 80))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtRut10, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(txtRut9, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtRut10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtRut9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
-        );
+        btnGroupRut.add(rdo10);
+        rdo10.setText("10 digitos");
+        rdo10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdo10MouseClicked(evt);
+            }
+        });
+        jPanel1.add(rdo10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 98, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        lblNombre.setText("Nombre");
+        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, -1));
+
+        lblCargo.setText("Cargo");
+        jPanel1.add(lblCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 66, -1));
+
+        lblArea.setText("Área");
+        jPanel1.add(lblArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, 37, -1));
+
+        lblCorreo.setText("Correo");
+        jPanel1.add(lblCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 57, -1));
+
+        lblRut10.setText("Rut de 10 digitos");
+        jPanel1.add(lblRut10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 117, -1));
+
+        lblRut9.setText("Rut de 9 digitos");
+        jPanel1.add(lblRut9, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 113, -1));
+
+        btnGroupAvanzado.add(rdoModificar);
+        rdoModificar.setText("Modificar");
+        rdoModificar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdoModificarMouseClicked(evt);
+            }
+        });
+        jPanel1.add(rdoModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 90, -1));
+
+        btnGroupAvanzado.add(rdoBuscar);
+        rdoBuscar.setText("Buscar");
+        rdoBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                rdoBuscarMouseClicked(evt);
+            }
+        });
+        jPanel1.add(rdoBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 70, -1));
+
+        btnEliminar.setText("Eliminar");
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 100, -1));
+
+        btnModificar.setText("Modificar");
+        jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 100, -1));
+        jPanel1.add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 330, 126, -1));
+
+        lblBusqueda.setBorder(javax.swing.BorderFactory.createTitledBorder("Búsqueda de trabajador"));
+        jPanel1.add(lblBusqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 340, 260));
+
+        lblContrasenia.setText("Contraseña");
+        jPanel1.add(lblContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, 80, -1));
+
+        lblAvanzado.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar o eliminar trabajador"));
+        jPanel1.add(lblAvanzado, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 340, 340));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusLost
+    private void rdo10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdo10MouseClicked
+        if (rdo10.isSelected()) {
+            txtRut10.setEnabled(true);
+            txtRut9.setEnabled(false);
+        }
+    }//GEN-LAST:event_rdo10MouseClicked
 
-    }//GEN-LAST:event_txtCorreoFocusLost
+    private void rdo9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdo9ActionPerformed
 
-    private void txtRut10FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRut10FocusLost
+    }//GEN-LAST:event_rdo9ActionPerformed
 
-    }//GEN-LAST:event_txtRut10FocusLost
-
-    private void txtRut10FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRut10FocusGained
- 
-    }//GEN-LAST:event_txtRut10FocusGained
+    private void rdo9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdo9MouseClicked
+        if (rdo9.isSelected()) {
+            txtRut10.setEnabled(false);
+            txtRut9.setEnabled(true);
+        }
+    }//GEN-LAST:event_rdo9MouseClicked
 
     private void txtRut10KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRut10KeyTyped
-   
+
     }//GEN-LAST:event_txtRut10KeyTyped
 
+    private void txtRut10KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRut10KeyReleased
+
+    }//GEN-LAST:event_txtRut10KeyReleased
+
     private void txtRut10KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRut10KeyPressed
+
     }//GEN-LAST:event_txtRut10KeyPressed
 
     private void txtRut10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtRut10MouseClicked
 
     }//GEN-LAST:event_txtRut10MouseClicked
 
-    private void txtRut10KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRut10KeyReleased
-        String rut = txtRut10.getText();
-        if (rut.length() > 9) {
-//            txtRut9.setText(rut);
-//            txtRut10.setVisible(false);
-            System.out.println(rut.length());
+    private void txtRut10FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRut10FocusLost
+
+    }//GEN-LAST:event_txtRut10FocusLost
+
+    private void txtRut10FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRut10FocusGained
+
+    }//GEN-LAST:event_txtRut10FocusGained
+
+    private void txtCorreoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCorreoFocusLost
+
+    }//GEN-LAST:event_txtCorreoFocusLost
+
+    private void btnBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBuscarMouseClicked
+
+    }//GEN-LAST:event_btnBuscarMouseClicked
+
+    private void rdoModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdoModificarMouseClicked
+        if (rdoModificar.isSelected()) {
+            lblAvanzado.setVisible(true);
+            lblBusqueda.setVisible(false);
+            btnBuscar.setVisible(false);
+            lblContrasenia.setVisible(true);
+            txtClave.setVisible(true);
+            btnEliminar.setVisible(true);
+            btnModificar.setVisible(true);
         }
-    }//GEN-LAST:event_txtRut10KeyReleased
+    }//GEN-LAST:event_rdoModificarMouseClicked
+
+    private void rdoBuscarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rdoBuscarMouseClicked
+        if (rdoBuscar.isSelected()) {
+            lblAvanzado.setVisible(false);
+            lblBusqueda.setVisible(true);
+            btnBuscar.setVisible(true);
+            lblContrasenia.setVisible(false);
+            txtClave.setVisible(false);
+            btnEliminar.setVisible(false);
+            btnModificar.setVisible(false);
+        }
+    }//GEN-LAST:event_rdoBuscarMouseClicked
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarUsuario();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,12 +415,30 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.ButtonGroup btnGroupAvanzado;
+    private javax.swing.ButtonGroup btnGroupRut;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblArea;
+    private javax.swing.JLabel lblAvanzado;
+    private javax.swing.JLabel lblBusqueda;
+    private javax.swing.JLabel lblCargo;
+    private javax.swing.JLabel lblContrasenia;
+    private javax.swing.JLabel lblCorreo;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblRut10;
+    private javax.swing.JLabel lblRut9;
+    private javax.swing.JRadioButton rdo10;
+    private javax.swing.JRadioButton rdo9;
+    private javax.swing.JRadioButton rdoBuscar;
+    private javax.swing.JRadioButton rdoModificar;
+    private javax.swing.JTable tblUsuarios;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtCargo;
+    private javax.swing.JTextField txtClave;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JFormattedTextField txtRut10;
