@@ -28,30 +28,24 @@ public class Controlador {
 
     public ResultSet buscarUsuario(Usuario usuario) {
         try {
+            String query = "SELECT * FROM Usuario";
+//            if (usuario.getRut() != null && !usuario.getRut().isEmpty()) {
+//                query.append(" AND Rut = '").append(usuario.getRut()).append("'");
+//            }
+//            if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
+//                query.append(" AND Nombre = '").append(usuario.getNombre()).append("'");
+//            }
+//            if (usuario.getCargo() != null && !usuario.getCargo().isEmpty()) {
+//                query.append(" AND Cargo = '").append(usuario.getCargo()).append("'");
+//            }
+//            if (usuario.getArea() != null && !usuario.getArea().isEmpty()) {
+//                query.append(" AND Area = '").append(usuario.getArea()).append("'");
+//            }
+//            if (usuario.getCorreo() != null && !usuario.getCorreo().isEmpty()) {
+//                query.append(" AND Correo = '").append(usuario.getClave()).append("'");
+//            }
             sentencia = conexion.establecerConexion().createStatement();
-            StringBuilder query = new StringBuilder("SELECT * FROM Usuario WHERE Id = 1");
-            if (usuario.getId() > -1) {
-                query.append(" AND Id = ").append(usuario.getId());
-            }
-            if (usuario.getRut() != null && !usuario.getRut().isEmpty()) {
-                query.append(" AND Rut = ").append(usuario.getRut());
-            }
-            if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
-                query.append(" AND Nombre = ").append(usuario.getNombre());
-            }
-            if (usuario.getCargo() != null && !usuario.getCargo().isEmpty()) {
-                query.append(" AND Cargo = ").append(usuario.getCargo());
-            }
-            if (usuario.getArea() != null && !usuario.getArea().isEmpty()) {
-                query.append(" AND Area = ").append(usuario.getArea());
-            }
-            if (usuario.getClave() != null && !usuario.getClave().isEmpty()) {
-                query.append(" AND Contrasenia = ").append(usuario.getClave());
-            }
-            if (usuario.getCorreo() != null && !usuario.getCorreo().isEmpty()) {
-                query.append(" AND Correo = ").append(usuario.getClave());
-            }
-            resultado = sentencia.executeQuery(query.toString());
+            resultado = sentencia.executeQuery(query);
         } catch (SQLException e) {
             System.out.println("Error al buscar el usuario " + e);
         }
