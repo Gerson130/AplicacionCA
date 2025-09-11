@@ -72,12 +72,11 @@ public class Controlador {
         return valido;
     }
 
-    public int modificarUsuario(int Id) {
+    public int modificarUsuario(Usuario usuario, int id) {
         int datos = 0;
-        Usuario usuario = new Usuario();
         try {
             sentencia = conexion.establecerConexion().createStatement();
-            String query = "UPDATE Usuario SET Rut = " + usuario.getRut() + " , Nombre = " + usuario.getNombre() + " , Cargo = " + usuario.getCargo() + " , Area = " + usuario.getArea() + " , Contrasenia = " + usuario.getClave() + " , Correo = " + usuario.getCorreo() + " WHERE Id =" + Id;
+            String query = "UPDATE Usuario SET Rut = '" + usuario.getRut() + "' , Nombre = '" + usuario.getNombre() + "' , Cargo = '" + usuario.getCargo() + "' , Area = '" + usuario.getArea() + "' , Clave = '" + usuario.getClave() + "' , Correo = '" + usuario.getCorreo() + "' WHERE Id =" + id;
             datos = sentencia.executeUpdate(query);
         } catch (SQLException e) {
             System.out.println("Error al actualizar el usuario " + e);
@@ -153,6 +152,17 @@ public class Controlador {
             System.out.println("Error al obtener usuario: " + e.getMessage());
         }
         return usuario;
+    }
+    
+    public ResultSet MostrarDatosDeUsuario() {
+        String query = "SELECT * FROM Usuario";
+        try {
+            sentencia = conexion.establecerConexion().createStatement();
+            resultado = sentencia.executeQuery(query);
+        } catch (SQLException e) {
+            System.err.println("Error al mostrar datos"+e);
+        }
+        return resultado;
     }
 
     

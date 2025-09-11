@@ -8,8 +8,8 @@ public class ConexionDB {
     public String url = "jdbc:mysql://localhost:3306/"+bd;
     public String usuario = "root";
 
-    //public String clave = "G3rzon23.";
-    public String clave = "Administrador";
+    public String clave = "G3rzon23.";
+//    public String clave = "Administrador";
     
 
 //    public String clave = "G3rzon23.";
