@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author gerso
@@ -19,7 +18,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     Controlador servicio = new Controlador();
     Usuario usuario = new Usuario();
     ConexionDB conexion = new ConexionDB();
-    
+
     public ResultSet resultado;
     public Statement sentencia;
 
@@ -37,11 +36,43 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         txtClave.setVisible(false);
         btnEliminar.setVisible(false);
         btnModificar.setVisible(false);
-        buscarUsuario();
+        rdoModificar.setEnabled(false);
+        mostrarTodosLosUsuarios();
+    }
+    
+    public void mostrarTodosLosUsuarios() {
+        DefaultTableModel nuevoModelo = new DefaultTableModel();
+        String[] lista = new String[7];
+        
+        nuevoModelo.addColumn("Id");
+        nuevoModelo.addColumn("Rut");
+        nuevoModelo.addColumn("Nombre");
+        nuevoModelo.addColumn("Cargo");
+        nuevoModelo.addColumn("Área");
+        nuevoModelo.addColumn("Clave");
+        nuevoModelo.addColumn("Correo");
+        tblUsuarios.setModel(nuevoModelo);
+        
+        try {
+            ResultSet resultado = servicio.MostrarDatosDeUsuario();
+            
+            while (resultado.next()) {
+                lista[0] = resultado.getString(1);
+                lista[1] = resultado.getString(2);
+                lista[2] = resultado.getString(3);
+                lista[3] = resultado.getString(4);
+                lista[4] = resultado.getString(5);
+                lista[5] = resultado.getString(6);
+                lista[6] = resultado.getString(7);
+                nuevoModelo.addRow(lista);
+                tblUsuarios.setModel(nuevoModelo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al llenar tabla"+e);
+        }
     }
 
     public void buscarUsuario() {
-//            servicio.MostrarDatosDeUsuario();
         String rut = "";
         String nombre = txtNombre.getText();
         String cargo = txtCargo.getText();
@@ -94,65 +125,71 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             System.out.println("Error al encontrar usuarios");
         }
     }
-    
+
     public void actualizarUsuario() {
         Usuario usuario = new Usuario();
         String rut = "";
-        String nombre = txtNombre.getText();
-        String cargo = txtCargo.getText();
-        String area = txtArea.getText();
-        String clave = txtClave.getText();
-        String correo = txtCorreo.getText();
-        
-        if (txtRut10.getText().endsWith(" ")){
+        String nombre = txtNombre.getText().trim();
+        String cargo = txtCargo.getText().trim();
+        String area = txtArea.getText().trim();
+        String clave = txtClave.getText().trim();
+        String correo = txtCorreo.getText().trim();
+
+        if (txtRut10.getText().endsWith(" ")) {
             rut = txtRut9.getText();
         }
-        if (txtRut9.getText().endsWith(" ")){
+        if (txtRut9.getText().endsWith(" ")) {
             rut = txtRut10.getText();
         }
-        
+
         String id = tblUsuarios.getValueAt(tblUsuarios.getSelectedRow(), 0).toString();
-        System.out.println(""+id);
-        
+        System.out.println("" + id);
+
         usuario.setRut(rut);
         usuario.setNombre(nombre);
         usuario.setCargo(cargo);
         usuario.setArea(area);
         usuario.setClave(clave);
         usuario.setCorreo(correo);
-        
+
         try {
             int modificacion = servicio.modificarUsuario(usuario, Integer.parseInt(id));
             if (modificacion == 0) {
                 JOptionPane.showMessageDialog(this, "Error", "Error al guardar los datos", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Información", "Los datos han sido guardados exitosamente", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (modificacion == -1) {
+                JOptionPane.showMessageDialog(this, "Complete el formulario porfavor", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
+            if (modificacion == -2) {
+                JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Información", JOptionPane.WARNING_MESSAGE);
+            }
+            if (modificacion == -3) {
+                JOptionPane.showMessageDialog(this, "El rut no se encuentra disponible", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (modificacion == 1) {
+                JOptionPane.showMessageDialog(this, "Los datos han sido guardados exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                mostrarTodosLosUsuarios();
             }
         } catch (Exception e) {
-            System.err.println("Error al acgtualizar datos "+e);
-            }
+            System.err.println("Error al acgtualizar datos " + e);
+        }
     }
 
-        
-    
-    
+    public int obtenerId(int id) {
+        return id;
+    }
 
-//    public void Limpiar() {
-//        txtArea.setText("");
-//        txtCargo.setText("");
-//        txtClave.setText("");
-//        txtCorreo.setText("");
-//        txtNombre.setText("");
-//        txtRut10.setText("");
-//        txtRut9.setText("");
-//
-//        try {
-//            sentencia = conexion.establecerConexion().createStatement();
-////            resultado = sentencia.executeQuery(string)
-//        } catch (SQLException e) {
-//            System.err.println("Error al encontrar datos");
-//        }
-//    }
+    public void eliminarUsuario() {
+        int fila = tblUsuarios.getSelectedRow();
+        int id = Integer.parseInt(tblUsuarios.getValueAt(fila, 0).toString());
+        if (id == 0) {
+            JOptionPane.showMessageDialog(this, "Error", "El usuario no se encuentra", JOptionPane.ERROR_MESSAGE);
+        } else {
+            servicio.eliminarUsuario(id);
+            JOptionPane.showMessageDialog(this, "Información", "Se eliminó correctamente", JOptionPane.INFORMATION_MESSAGE);
+            mostrarTodosLosUsuarios();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -230,13 +267,36 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         jScrollPane2.setViewportView(tblUsuarios);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(409, 35, -1, 330));
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, 126, -1));
+
+        txtCargo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCargoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 160, 126, -1));
+
+        txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 210, 126, -1));
 
         txtCorreo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCorreoFocusLost(evt);
+            }
+        });
+        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCorreoKeyTyped(evt);
             }
         });
         jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 126, -1));
@@ -339,6 +399,11 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         jPanel1.add(rdoBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, 70, -1));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 100, -1));
 
         btnModificar.setText("Modificar");
@@ -348,6 +413,12 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             }
         });
         jPanel1.add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 290, 100, -1));
+
+        txtClave.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtClaveKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtClave, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 126, -1));
 
         btnLimpiar.setText("Limpiar");
@@ -433,6 +504,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             txtClave.setVisible(true);
             btnEliminar.setVisible(true);
             btnModificar.setVisible(true);
+            btnLimpiar.setEnabled(false);
         }
     }//GEN-LAST:event_rdoModificarMouseClicked
 
@@ -445,6 +517,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             txtClave.setVisible(false);
             btnEliminar.setVisible(false);
             btnModificar.setVisible(false);
+            btnLimpiar.setEnabled(true);
         }
     }//GEN-LAST:event_rdoBuscarMouseClicked
 
@@ -460,42 +533,103 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         txtNombre.setText("");
         txtRut10.setText("");
         txtRut9.setText("");
-//
-//        try {
-//            sentencia = conexion.establecerConexion().createStatement();
-//            
-//        } catch (SQLException e) {
-//            System.err.println("Error al encontrar datos");
-//        }
+        rdoModificar.setEnabled(false);
+        mostrarTodosLosUsuarios();
+
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
+
         int fila = tblUsuarios.getSelectedRow();
-        String rut = tblUsuarios.getValueAt(fila, 1).toString();
-        if (rut.length() == 9) {
-            txtRut9.setText(rut);
-            txtRut10.setText("");
-            txtRut9.setEnabled(true);
-            rdo9.setSelected(true);
-            txtRut10.setEnabled(false);
+        if (fila > 0) {
+            rdoModificar.setEnabled(true);
+            String rut = tblUsuarios.getValueAt(fila, 1).toString();
+            if (rut.length() == 9) {
+                txtRut9.setText(rut);
+                txtRut10.setText("");
+                txtRut9.setEnabled(true);
+                rdo9.setSelected(true);
+                txtRut10.setEnabled(false);
+            } else {
+                txtRut10.setText(rut);
+                txtRut9.setText("");
+                txtRut10.setEnabled(true);
+                rdo10.setSelected(true);
+                txtRut9.setEnabled(false);
+            }
+            txtNombre.setText(tblUsuarios.getValueAt(fila, 2).toString());
+            txtCargo.setText(tblUsuarios.getValueAt(fila, 3).toString());
+            txtArea.setText(tblUsuarios.getValueAt(fila, 4).toString());
+            txtClave.setText(tblUsuarios.getValueAt(fila, 5).toString());
+            txtCorreo.setText(tblUsuarios.getValueAt(fila, 6).toString());
+
+            int id = Integer.parseInt(tblUsuarios.getValueAt(fila, 0).toString());
+            System.out.println(id);
         }
-        else {
-            txtRut10.setText(rut);
-            txtRut9.setText("");
-            txtRut10.setEnabled(true);
-            rdo10.setSelected(true);
-            txtRut9.setEnabled(false);
-        }
-        txtNombre.setText(tblUsuarios.getValueAt(fila, 2).toString());
-        txtCargo.setText(tblUsuarios.getValueAt(fila, 3).toString());
-        txtArea.setText(tblUsuarios.getValueAt(fila, 4).toString());
-        txtClave.setText(tblUsuarios.getValueAt(fila, 5).toString());
-        txtCorreo.setText(tblUsuarios.getValueAt(fila, 6).toString());
     }//GEN-LAST:event_tblUsuariosMouseClicked
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         actualizarUsuario();
     }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        eliminarUsuario();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        String largo = txtNombre.getText();
+        char caracter = evt.getKeyChar();
+        if (largo.length() >= 50) {
+            evt.consume();
+        }
+        if (caracter < 'A' && caracter < 'a' && caracter > '0'  ){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtCargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCargoKeyTyped
+        String largo = txtCargo.getText();
+        char caracter = evt.getKeyChar();
+        
+        if (largo.length() >= 30) {
+            evt.consume();
+        }
+        if (caracter < 'A' && caracter < 'a' && caracter > '0') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCargoKeyTyped
+
+    private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
+        String largo = txtArea.getText();
+        char caracter = evt.getKeyChar();
+        
+        if (largo.length() >= 30) {
+            evt.consume();
+        }
+        if (caracter < 'A' && caracter < 'a' && caracter > '0') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAreaKeyTyped
+
+    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
+        String largo = txtCorreo.getText();
+        char caracter = evt.getKeyChar();
+        
+        if (largo.length() >= 30) {
+            evt.consume();
+        }
+        if (caracter == ' ') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCorreoKeyTyped
+
+    private void txtClaveKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveKeyTyped
+        String largo = txtClave.getText();
+        
+        if (largo.length() >= 10) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtClaveKeyTyped
 
     /**
      * @param args the command line arguments

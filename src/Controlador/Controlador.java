@@ -63,6 +63,16 @@ public class Controlador {
         }
         return resultado;
     }
+    
+    public ResultSet validarRutYIdUsuario(int id, String rut) {
+        try {
+            String query = "SELECT * FROM Usuario WHERE Rut = '"+rut+"' AND Id = "+id;
+            sentencia.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("Error de validación "+ e);
+        }
+        return resultado;
+    }
 
     public boolean validarCorreoUsuario(String correo) {
         boolean valido = true;
@@ -75,11 +85,24 @@ public class Controlador {
     public int modificarUsuario(Usuario usuario, int id) {
         int datos = 0;
         try {
-            sentencia = conexion.establecerConexion().createStatement();
-            String query = "UPDATE Usuario SET Rut = '" + usuario.getRut() + "' , Nombre = '" + usuario.getNombre() + "' , Cargo = '" + usuario.getCargo() + "' , Area = '" + usuario.getArea() + "' , Clave = '" + usuario.getClave() + "' , Correo = '" + usuario.getCorreo() + "' WHERE Id =" + id;
-            datos = sentencia.executeUpdate(query);
+            boolean validacionCorreo = validarCorreoUsuario(usuario.getCorreo());
+            if (validacionCorreo) {
+                datos = -2;
+            }
+            else {
+                sentencia = conexion.establecerConexion().createStatement();
+                String query = "UPDATE Usuario SET Rut = '" + usuario.getRut() + "' , Nombre = '" + usuario.getNombre() + "' , Cargo = '" + usuario.getCargo() + "' , Area = '" + usuario.getArea() + "' , Clave = '" + usuario.getClave() + "' , Correo = '" + usuario.getCorreo() + "' WHERE Id =" + id;
+                    if (usuario.getRut().endsWith(" ") || usuario.getNombre().trim().isEmpty() || usuario.getCargo().trim().isEmpty() || usuario.getArea().trim().isEmpty() || usuario.getClave().trim().isEmpty() || usuario.getCorreo().trim().isEmpty()) {
+                        datos = -1;
+                    } else {
+                        datos = sentencia.executeUpdate(query);
+                    }
+            }
         } catch (SQLException e) {
             System.out.println("Error al actualizar el usuario " + e);
+            if (e.getMessage().endsWith("'usuario.rut_UNIQUE'")) {
+                datos = -3;
+            }
         }
         return datos;
     }
