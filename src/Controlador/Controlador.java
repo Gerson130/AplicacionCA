@@ -32,17 +32,17 @@ public class Controlador {
             if (usuario.getRut() != null && !usuario.getRut().isEmpty() && !usuario.getRut().endsWith(" ")) {
                 query.append(" AND Rut = '").append(usuario.getRut()).append("'");
             }
-            if (usuario.getNombre() != null && !usuario.getNombre().isEmpty()) {
+            if (usuario.getNombre() != null && !usuario.getNombre().trim().isEmpty()) {
                 query.append(" AND Nombre = '").append(usuario.getNombre()).append("'");
             }
-            if (usuario.getCargo() != null && !usuario.getCargo().isEmpty()) {
+            if (usuario.getCargo() != null && !usuario.getCargo().trim().isEmpty()) {
                 query.append(" AND Cargo = '").append(usuario.getCargo()).append("'");
             }
-            if (usuario.getArea() != null && !usuario.getArea().isEmpty()) {
+            if (usuario.getArea() != null && !usuario.getArea().trim().isEmpty()) {
                 query.append(" AND Area = '").append(usuario.getArea()).append("'");
             }
-            if (usuario.getCorreo() != null && !usuario.getCorreo().isEmpty()) {
-                query.append(" AND Correo = '").append(usuario.getClave()).append("'");
+            if (usuario.getCorreo() != null && !usuario.getCorreo().trim().isEmpty()) {
+                query.append(" AND Correo = '").append(usuario.getCorreo()).append("'");
             }
             sentencia = conexion.establecerConexion().createStatement();
             resultado = sentencia.executeQuery(query.toString());

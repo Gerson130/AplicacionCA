@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -28,6 +29,8 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     public ModificaUsuarioFrm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
+        setSize(1000,500);
         rdo10.setSelected(true);
         txtRut9.setEnabled(false);
         rdoBuscar.setSelected(true);
@@ -37,13 +40,14 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         btnEliminar.setVisible(false);
         btnModificar.setVisible(false);
         rdoModificar.setEnabled(false);
+        btnVolver2.setVisible(false);
         mostrarTodosLosUsuarios();
     }
-    
+
     public void mostrarTodosLosUsuarios() {
         DefaultTableModel nuevoModelo = new DefaultTableModel();
         String[] lista = new String[7];
-        
+
         nuevoModelo.addColumn("Id");
         nuevoModelo.addColumn("Rut");
         nuevoModelo.addColumn("Nombre");
@@ -52,10 +56,10 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         nuevoModelo.addColumn("Clave");
         nuevoModelo.addColumn("Correo");
         tblUsuarios.setModel(nuevoModelo);
-        
+
         try {
             ResultSet resultado = servicio.MostrarDatosDeUsuario();
-            
+
             while (resultado.next()) {
                 lista[0] = resultado.getString(1);
                 lista[1] = resultado.getString(2);
@@ -68,7 +72,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
                 tblUsuarios.setModel(nuevoModelo);
             }
         } catch (SQLException e) {
-            System.out.println("Error al llenar tabla"+e);
+            System.out.println("Error al llenar tabla" + e);
         }
     }
 
@@ -93,12 +97,13 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         usuario.setCorreo(correo);
 
         try {
+            ImageIcon info = new ImageIcon("src/Images/info.png");
             ResultSet busqueda = servicio.buscarUsuario(usuario);
 
             String[] datosBD = new String[7];
 
             DefaultTableModel nuevoModelo = new DefaultTableModel();
-
+            
             nuevoModelo.addColumn("Id");
             nuevoModelo.addColumn("Rut");
             nuevoModelo.addColumn("Nombre");
@@ -108,19 +113,24 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             nuevoModelo.addColumn("Correo");
 
             tblUsuarios.setModel(nuevoModelo);
-
-            while (busqueda.next() == true) {
-                datosBD[0] = busqueda.getString(1);
-                datosBD[1] = busqueda.getString(2);
-                datosBD[2] = busqueda.getString(3);
-                datosBD[3] = busqueda.getString(4);
-                datosBD[4] = busqueda.getString(5);
-                datosBD[5] = busqueda.getString(6);
-                datosBD[6] = busqueda.getString(7);
-                nuevoModelo.addRow(datosBD);
-                tblUsuarios.setModel(nuevoModelo);
-            }
-
+            
+            int registros = 0;
+            
+                while (busqueda.next() == true) {
+                    datosBD[0] = busqueda.getString(1);
+                    datosBD[1] = busqueda.getString(2);
+                    datosBD[2] = busqueda.getString(3);
+                    datosBD[3] = busqueda.getString(4);
+                    datosBD[4] = busqueda.getString(5);
+                    datosBD[5] = busqueda.getString(6);
+                    datosBD[6] = busqueda.getString(7);
+                    nuevoModelo.addRow(datosBD);
+                    tblUsuarios.setModel(nuevoModelo);
+                    registros++;
+                }
+                
+                JOptionPane.showMessageDialog(this, "Se han encontrado "+registros+" registros", "Información", JOptionPane.INFORMATION_MESSAGE, info);
+            
         } catch (SQLException e) {
             System.out.println("Error al encontrar usuarios");
         }
@@ -153,41 +163,53 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         usuario.setCorreo(correo);
 
         try {
-            int modificacion = servicio.modificarUsuario(usuario, Integer.parseInt(id));
-            if (modificacion == 0) {
-                JOptionPane.showMessageDialog(this, "Error", "Error al guardar los datos", JOptionPane.ERROR_MESSAGE);
-            }
-            if (modificacion == -1) {
-                JOptionPane.showMessageDialog(this, "Complete el formulario porfavor", "Información", JOptionPane.INFORMATION_MESSAGE);
-            }
-            if (modificacion == -2) {
-                JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Información", JOptionPane.WARNING_MESSAGE);
-            }
-            if (modificacion == -3) {
-                JOptionPane.showMessageDialog(this, "El rut no se encuentra disponible", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            if (modificacion == 1) {
-                JOptionPane.showMessageDialog(this, "Los datos han sido guardados exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                mostrarTodosLosUsuarios();
+            ImageIcon advertencia = new ImageIcon("src/Images/advertenciaA.png");
+            ImageIcon error = new ImageIcon("src/Images/error.png");
+            ImageIcon info = new ImageIcon("src/Images/info.png");
+            ImageIcon advertencia2 = new ImageIcon("src/Images/advertenciaR.png");
+            ImageIcon ok = new ImageIcon("src/Images/ok.png");
+            
+            int confirmacion = JOptionPane.showConfirmDialog(this, "A continuación procederá a modificar los datos ?Esta seguro/a?", "Advertencia", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, advertencia);
+            if (confirmacion == 0) {
+                int modificacion = servicio.modificarUsuario(usuario, Integer.parseInt(id));
+                if (modificacion == 0) {
+                    JOptionPane.showMessageDialog(this, "Error", "Error al guardar los datos", JOptionPane.ERROR_MESSAGE, error);
+                }
+                if (modificacion == -1) {
+                    JOptionPane.showMessageDialog(this, "Complete el formulario porfavor", "Información", JOptionPane.INFORMATION_MESSAGE, info);
+                }
+                if (modificacion == -2) {
+                    JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Advertencia", JOptionPane.WARNING_MESSAGE, advertencia2);
+                }
+                if (modificacion == -3) {
+                    JOptionPane.showMessageDialog(this, "El rut ya está siendo utilizado", "Error", JOptionPane.ERROR_MESSAGE, error);
+                }
+                if (modificacion == 1) {
+                    JOptionPane.showMessageDialog(this, "Los datos han sido guardados exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE, ok);
+                    mostrarTodosLosUsuarios();
+                }
             }
         } catch (Exception e) {
             System.err.println("Error al acgtualizar datos " + e);
         }
     }
 
-    public int obtenerId(int id) {
-        return id;
-    }
-
     public void eliminarUsuario() {
+        ImageIcon advertencia = new ImageIcon("src/Images/Warning-icon.-The-attention-icon.png");
+        ImageIcon ok = new ImageIcon("src/Images/ok.png");
+        ImageIcon error = new ImageIcon("src/Images/error.png");
         int fila = tblUsuarios.getSelectedRow();
         int id = Integer.parseInt(tblUsuarios.getValueAt(fila, 0).toString());
+        String nombre = tblUsuarios.getValueAt(fila, 2).toString();
         if (id == 0) {
-            JOptionPane.showMessageDialog(this, "Error", "El usuario no se encuentra", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error", "El usuario no se encuentra", JOptionPane.ERROR_MESSAGE, error);
         } else {
-            servicio.eliminarUsuario(id);
-            JOptionPane.showMessageDialog(this, "Información", "Se eliminó correctamente", JOptionPane.INFORMATION_MESSAGE);
-            mostrarTodosLosUsuarios();
+            int confirmacion = JOptionPane.showConfirmDialog(this, "?Esta seguro/a? procederá a eliminar el usuario: " + nombre, "Advertencia", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, advertencia);
+            if (confirmacion == 0) {
+                servicio.eliminarUsuario(id);
+                JOptionPane.showMessageDialog(this, "El usuario se eliminó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE, ok);
+                mostrarTodosLosUsuarios();
+            }
         }
     }
 
@@ -215,6 +237,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         rdo9 = new javax.swing.JRadioButton();
         rdo10 = new javax.swing.JRadioButton();
         lblNombre = new javax.swing.JLabel();
+        btnVolver2 = new javax.swing.JButton();
         lblCargo = new javax.swing.JLabel();
         lblArea = new javax.swing.JLabel();
         lblCorreo = new javax.swing.JLabel();
@@ -222,6 +245,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         lblRut9 = new javax.swing.JLabel();
         rdoModificar = new javax.swing.JRadioButton();
         rdoBuscar = new javax.swing.JRadioButton();
+        btnVolver1 = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
         txtClave = new javax.swing.JTextField();
@@ -246,7 +270,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, -1, -1));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 75, -1));
 
         tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -266,7 +290,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblUsuarios);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(409, 35, -1, 330));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(409, 35, 550, 330));
 
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -365,6 +389,14 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         lblNombre.setText("Nombre");
         jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, -1));
 
+        btnVolver2.setText("Volver");
+        btnVolver2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolver2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVolver2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 75, -1));
+
         lblCargo.setText("Cargo");
         jPanel1.add(lblCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 66, -1));
 
@@ -397,6 +429,14 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             }
         });
         jPanel1.add(rdoBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, 70, -1));
+
+        btnVolver1.setText("Volver");
+        btnVolver1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolver1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnVolver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 290, 75, -1));
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -505,6 +545,8 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             btnEliminar.setVisible(true);
             btnModificar.setVisible(true);
             btnLimpiar.setEnabled(false);
+            btnVolver1.setVisible(false);
+            btnVolver2.setVisible(true);
         }
     }//GEN-LAST:event_rdoModificarMouseClicked
 
@@ -518,6 +560,8 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
             btnEliminar.setVisible(false);
             btnModificar.setVisible(false);
             btnLimpiar.setEnabled(true);
+            btnVolver2.setVisible(false);
+            btnVolver1.setVisible(true);
         }
     }//GEN-LAST:event_rdoBuscarMouseClicked
 
@@ -541,7 +585,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
 
         int fila = tblUsuarios.getSelectedRow();
-        if (fila > 0) {
+        if (fila >= 0) {
             rdoModificar.setEnabled(true);
             String rut = tblUsuarios.getValueAt(fila, 1).toString();
             if (rut.length() == 9) {
@@ -582,7 +626,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
         if (largo.length() >= 50) {
             evt.consume();
         }
-        if (caracter < 'A' && caracter < 'a' && caracter > '0'  ){
+        if (caracter < 'A' && caracter < 'a' && caracter > '0') {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
@@ -590,7 +634,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     private void txtCargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCargoKeyTyped
         String largo = txtCargo.getText();
         char caracter = evt.getKeyChar();
-        
+
         if (largo.length() >= 30) {
             evt.consume();
         }
@@ -602,7 +646,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
         String largo = txtArea.getText();
         char caracter = evt.getKeyChar();
-        
+
         if (largo.length() >= 30) {
             evt.consume();
         }
@@ -614,7 +658,7 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
         String largo = txtCorreo.getText();
         char caracter = evt.getKeyChar();
-        
+
         if (largo.length() >= 30) {
             evt.consume();
         }
@@ -625,11 +669,19 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
 
     private void txtClaveKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveKeyTyped
         String largo = txtClave.getText();
-        
+
         if (largo.length() >= 10) {
             evt.consume();
         }
     }//GEN-LAST:event_txtClaveKeyTyped
+
+    private void btnVolver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver1ActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVolver1ActionPerformed
+
+    private void btnVolver2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver2ActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnVolver2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -680,6 +732,8 @@ public class ModificaUsuarioFrm extends javax.swing.JDialog {
     private javax.swing.ButtonGroup btnGroupRut;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnVolver1;
+    private javax.swing.JButton btnVolver2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblArea;

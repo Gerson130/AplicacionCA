@@ -7,6 +7,7 @@ package Vista;
 import Controlador.Controlador;
 import Model.Usuario;
 import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -29,12 +30,18 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
     public void creaUsuario() {
         Usuario usuario = new Usuario();
         
+        ImageIcon advertenciaA = new ImageIcon("src/Images/advertenciaA.png");
+        ImageIcon advertenciaR = new ImageIcon("src/Images/advertenciaR.png");
+        ImageIcon error = new ImageIcon("src/Images/error.png");
+        ImageIcon ok = new ImageIcon("src/Images/ok.png");
+        ImageIcon info = new ImageIcon("src/Images/info.png");
+        
         String rut = "";
-        String nombre = txtNombre.getText();
-        String cargo = txtCargo.getText();
-        String area = txtArea.getText();
-        String contrasenia = txtContrasenia.getText();
-        String correo = txtCorreo.getText();
+        String nombre = txtNombre.getText().trim();
+        String cargo = txtCargo.getText().trim();
+        String area = txtArea.getText().trim();
+        String contrasenia = txtContrasenia.getText().trim();
+        String correo = txtCorreo.getText().trim();
         
         if (txtRut9.getText().endsWith(" ")) {
             rut = txtRut.getText();
@@ -51,21 +58,21 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         usuario.setCorreo(correo);
         System.out.println(""+txtRut.getText()+txtRut9.getText());
         if (rut.isEmpty() || rut.endsWith(" ") || nombre.isEmpty() || cargo.isEmpty() || area.isEmpty() || contrasenia.isEmpty() || correo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese los datos correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Ingrese los datos correctamente", "Error", JOptionPane.ERROR_MESSAGE, error);
         } else {
             Controlador c = new Controlador();
             int datosGuardado = c.guardarUsuario(usuario);
             if (datosGuardado == -1) {
-                JOptionPane.showMessageDialog(this, "El rut ingresado ya existe", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El rut ingresado ya existe", "Advertencia", JOptionPane.WARNING_MESSAGE, advertenciaR);
             }
             if (datosGuardado == -2) {
-                JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Información", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El correo ingresado no cumple con formato", "Información", JOptionPane.WARNING_MESSAGE, info);
             }
             if (datosGuardado == 1) {
-                JOptionPane.showMessageDialog(this, "El registro se completo exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El registro se completo exitosamente", "Información", JOptionPane.INFORMATION_MESSAGE, ok);
             }
             if (datosGuardado == 0) {
-                JOptionPane.showMessageDialog(this, "No se logró ingresar registro, revise los datos", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se logró ingresar registro, revise los datos", "Error", JOptionPane.ERROR_MESSAGE, error);
             }
         }
     }
@@ -280,7 +287,7 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         if (largoTexto.length() >= 50) {
             evt.consume();
         }
-        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+        if (texto < 'a' && texto < 'A' && texto > '0') {
             evt.consume();
         }
     }//GEN-LAST:event_txtNombreKeyTyped
@@ -292,7 +299,7 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         if (largoTexto.length() >= 30) {
             evt.consume();
         }
-        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+        if (texto < 'a' && texto < 'A' && texto > '0') {
             evt.consume();
         }
     }//GEN-LAST:event_txtCargoKeyTyped
@@ -304,7 +311,7 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
         if (largoTexto.length() >= 30) {
             evt.consume();
         }
-        if (texto < 'a' && texto < 'A' || texto > 'z' && texto > 'Z') {
+        if (texto < 'a' && texto < 'A' && texto > '0') {
             evt.consume();
         }
     }//GEN-LAST:event_txtAreaKeyTyped
@@ -319,8 +326,13 @@ public class CreaUsuarioFrm extends javax.swing.JDialog {
 
     private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
         String largoTexto = txtCorreo.getText();
+        char texto = evt.getKeyChar();
         
         if (largoTexto.length() >= 30) {
+            evt.consume();
+        }
+        
+        if (texto == ' ') {
             evt.consume();
         }
     }//GEN-LAST:event_txtCorreoKeyTyped

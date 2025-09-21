@@ -31,9 +31,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/user.png"))); // NOI18N
         btnNuevo.setText("Nuevo usuario");
         btnNuevo.setPreferredSize(new java.awt.Dimension(80, 20));
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -42,6 +44,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
             }
         });
 
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/update-account-symbol-reload-user-260nw-477685168.jpg"))); // NOI18N
         btnModificar.setText("Modificar usuario");
         btnModificar.setPreferredSize(new java.awt.Dimension(80, 20));
         btnModificar.setVerifyInputWhenFocusTarget(false);
@@ -51,16 +54,25 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
             }
         });
 
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/images.png"))); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(173, 173, 173)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(184, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+                .addContainerGap(162, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -69,7 +81,9 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                 .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(249, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -95,6 +109,10 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         ModificaUsuarioFrm modificaUsuario = new ModificaUsuarioFrm(this, true);
         modificaUsuario.setVisible(true);
     }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,6 +152,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

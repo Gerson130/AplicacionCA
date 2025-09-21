@@ -6,6 +6,7 @@ import Vista.LoginFrm;
 
 import Vista.CreaUsuarioFrm;
 import Vista.MenuPrincipalFrm;
+import javax.swing.UIManager;
 
 public class Principal {
 
@@ -21,7 +22,13 @@ public class Principal {
                 new LoginFrm().setVisible(true);
             }
         });
-
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.put("OptionPane.yesButtonText", "Si");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         MenuPrincipalFrm ventana = new MenuPrincipalFrm();
         ventana.setVisible(true);
 
